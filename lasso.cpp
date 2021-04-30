@@ -46,10 +46,10 @@ void LassoPoint::register_point(Ref<LassoDB> p_database, Node *p_origin) {
 };
 
 void LassoPoint::unregister_point() {
-	if (database != nullptr) {
+	if (database.is_valid()) {
 		database->remove_point(this);
 	}
-	database = nullptr;
+	database.unref();
 }
 
 float LassoPoint::get_snap_score() {
@@ -117,7 +117,7 @@ void LassoDB::_bind_methods() {
 }
 
 void LassoDB::add_point(Ref<LassoPoint> point) {
-	if(!point.is_null() && !points.has(point)){
+	if(point.is_valid() && !points.has(point)){
 		points.append(point);
 	}
 }
@@ -131,11 +131,11 @@ void LassoDB::remove_point(Ref<LassoPoint> point) {
 
 Array LassoDB::calc_top_two_snapping_power(Transform source, Node *current_snap, float snap_max_power_increase, float snap_increase_amount, bool snap_lock) {
 	Array output;
-	Ref<LassoPoint>first = nullptr;
-	Ref<LassoPoint>second = nullptr;
+	Ref<LassoPoint>first;
+	Ref<LassoPoint>second;
 	for (int i = 0; i < points.size(); i++){
 		Ref<LassoPoint> next = points[i];
-		if(next != nullptr && next->valid_origin() && next->snapping_enabled){
+		if(next.is_valid() && next->valid_origin() && next->snapping_enabled){
 			Vector3 point_local = source.xform_inv(next->get_origin_pos());
 			float euclidian_dist = point_local.length();
 			float angular_dist = point_local.angle_to(Vector3(0, 0, -1));
@@ -153,7 +153,7 @@ Array LassoDB::calc_top_two_snapping_power(Transform source, Node *current_snap,
 				if(next->snap_locked && snap_lock){
 					next->set_snap_score(snapping_power);
 					first = next;
-					second = nullptr;
+					second.unref();
 					break;
 				}
 			}
@@ -191,13 +191,13 @@ Node *LassoDB::calc_top_redirecting_power(Node *snapped_origin, Transform viewpo
 
 		Vector3 local_snapped_vector = local_basis.xform(snapped_vector);
 
-		Ref<LassoPoint> first = nullptr;
+		Ref<LassoPoint> first;
 		float redirect_power = Math_INF;//lower is better
 		float biggest_diff = 0;
 		for (int i = 0; i < points.size(); i++) {
 			Ref<LassoPoint> next = points[i];
 			float next_power = 0;
-			if (!next.is_null() && next->valid_origin() && !next->matching_origin(snapped_origin_spatial)) {
+			if (next.is_valid() && next->valid_origin() && !next->matching_origin(snapped_origin_spatial)) {
 				Vector3 point_vector = viewpoint.origin - next->get_origin_pos();
 				if (point_vector.angle_to(snapped_vector) < Math_PI / 4.0) {
 					Vector3 point_xyz = local_basis.xform(point_vector);
@@ -238,7 +238,7 @@ Node *LassoDB::calc_top_redirecting_power(Node *snapped_origin, Transform viewpo
 				}
 			}
 		}
-		if(first != nullptr && first->valid_origin()){
+		if(first.is_valid() && first->valid_origin()){
 			output = first->get_origin();
 		}
 	}
