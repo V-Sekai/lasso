@@ -190,7 +190,6 @@ Node *LassoDB::calc_top_redirecting_power(Node *snapped_origin, Transform viewpo
 		Basis local_basis = Basis(x_vector, y_vector, z_vector);//ITS FUCKING TRANSPOSED BY DEFAULT. WHY!?
 
 		Vector3 local_snapped_vector = local_basis.xform(snapped_vector);
-		printf_s("local_snapped: %f, %f, %f", local_snapped_vector[0], local_snapped_vector[1], local_snapped_vector[2]);
 
 		Ref<LassoPoint> first = nullptr;
 		float redirect_power = Math_INF;//lower is better
