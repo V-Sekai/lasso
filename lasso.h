@@ -13,8 +13,8 @@
 
 class LassoDB;
 
-class LassoPoint : public Reference {
-	GDCLASS(LassoPoint, Reference);
+class LassoPoint : public RefCounted {
+	GDCLASS(LassoPoint, RefCounted);
 
 	Spatial *origin = nullptr;
 	float last_snap_score = 0.0;
@@ -46,8 +46,8 @@ public:
 	float get_snapping_power();
 };
 
-class LassoDB : public Reference {
-	GDCLASS(LassoDB, Reference);
+class LassoDB : public RefCounted {
+	GDCLASS(LassoDB, RefCounted);
 
 	Array points;
 
