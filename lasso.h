@@ -2,9 +2,9 @@
 #define LASSODB_H
 #ifndef _3D_DISABLED
 
-#include <core/engine.h>
+#include <core/config/engine.h>
 #include <core/object.h>
-#include <core/variant.h>
+#include <core/variant/variant.h>
 #include <scene/3d/spatial.h>
 #include <scene/main/node.h>
 #include <memory>
