@@ -27,7 +27,7 @@ public:
 	float size = 0.3;
 	LassoPoint();
 	~LassoPoint();
-	void register_point(Ref<LassoDB>p_database, Node *p_origin);
+	void register_point(Ref<LassoDB> p_database, Node *p_origin);
 	void unregister_point();
 	float get_snap_score();
 	void set_snap_score(float score);
