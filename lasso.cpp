@@ -1,6 +1,6 @@
 #include "lasso.h"
 #include <core/math/math_defs.h>
-#include <servers/arvr_server.h>
+#include <servers/xr_server.h>
 
 LassoPoint::LassoPoint(){};
 
@@ -23,8 +23,6 @@ void LassoPoint::_bind_methods() {
 			&LassoPoint::set_snapping_power);
 	ClassDB::bind_method(D_METHOD("get_snapping_power"),
 			&LassoPoint::get_snapping_power);
-	// ClassDB::bind_method(D_METHOD("set_snap_score", "p_snap_score"),
-	// &LassoPoint::set_snap_score);
 	ClassDB::bind_method(D_METHOD("get_snap_score"), &LassoPoint::get_snap_score);
 	ClassDB::bind_method(D_METHOD("get_origin"), &LassoPoint::get_origin);
 	ClassDB::bind_method(D_METHOD("register_point", "p_database", "p_origin"),
@@ -43,7 +41,7 @@ bool LassoPoint::get_snap_locked() {
 
 void LassoPoint::register_point(Ref<LassoDB> p_database, Node *p_origin) {
 	database = p_database;
-	origin = cast_to<Spatial>(p_origin);
+	origin = cast_to<Node3D>(p_origin);
 	ERR_FAIL_NULL(origin);
 	ERR_FAIL_COND(database.is_null());
 	database->add_point(this);
@@ -131,7 +129,7 @@ void LassoDB::remove_point(Ref<LassoPoint> point) {
 	}
 }
 
-Array LassoDB::calc_top_two_snapping_power(Transform source, Node *current_snap,
+Array LassoDB::calc_top_two_snapping_power(Transform3D source, Node *current_snap,
 		float snap_max_power_increase,
 		float snap_increase_amount,
 		bool snap_lock) {
@@ -183,21 +181,19 @@ Array LassoDB::calc_top_two_snapping_power(Transform source, Node *current_snap,
 }
 
 Node *LassoDB::calc_top_redirecting_power(Node *snapped_origin,
-		Transform viewpoint,
+		Transform3D viewpoint,
 		Vector2 redirection_direction) {
-	Spatial *snapped_origin_spatial = cast_to<Spatial>(snapped_origin);
-	ERR_FAIL_NULL_V(snapped_origin_spatial, nullptr);
+	Node3D *snapped_origin_Node3D = cast_to<Node3D>(snapped_origin);
+	ERR_FAIL_NULL_V(snapped_origin_Node3D, nullptr);
 
-	Node *output = snapped_origin_spatial;
+	Node *output = snapped_origin_Node3D;
 
 	if (redirection_direction.length_squared() > 0) {
-		// calc the basis
+		// Caclculate the basis.
 		Vector3 snapped_origin_position =
-				snapped_origin_spatial->get_global_transform().origin;
+				snapped_origin_Node3D->get_global_transform().origin;
 		Vector3 snapped_vector = viewpoint.origin - snapped_origin_position;
 		Vector3 z_vector = snapped_vector.normalized();
-		// Vector3 up_vector =
-		// ARVRServer::get_singleton()->get_hmd_transform().get_basis().get_column(1);
 		Vector3 up_vector = viewpoint.get_basis().get_axis(1).normalized();
 		Vector3 x_vector = z_vector.cross(up_vector).normalized();
 		Vector3 y_vector = x_vector.cross(z_vector).normalized();
@@ -208,13 +204,13 @@ Node *LassoDB::calc_top_redirecting_power(Node *snapped_origin,
 		Vector3 local_snapped_vector = local_basis.xform(snapped_vector);
 
 		Ref<LassoPoint> first;
-		float redirect_power = Math_INF; // lower is better
+		float redirect_power = INFINITY; // The lower is better.
 		float biggest_diff = 0;
 		for (int i = 0; i < points.size(); i++) {
 			Ref<LassoPoint> next = points[i];
 			float next_power = 0;
 			if (next.is_valid() && next->valid_origin() &&
-					!next->matching_origin(snapped_origin_spatial)) {
+					!next->matching_origin(snapped_origin_Node3D)) {
 				Vector3 point_vector = viewpoint.origin - next->get_origin_pos();
 				if (point_vector.angle_to(snapped_vector) < Math_PI / 4.0) {
 					Vector3 point_xyz = local_basis.xform(point_vector);
@@ -223,24 +219,24 @@ Node *LassoDB::calc_top_redirecting_power(Node *snapped_origin,
 					if (Math::abs(redirection_direction.angle_to(point_xy)) >=
 							Math_PI / 2) {
 						continue;
-						// keep the redirect power at infinity if the joystick is more than
-						// 90 degrees away from the point
+						// Keep the redirect power at infinity if the joystick is more than
+						// 90 degrees away from the point.
 					} else if (redirection_direction[0] == 0 && point_xy[1] != 0) {
-						// if you moved your joystick perfectly vertically calculating the
+						// If you moved your joystick perfectly vertically calculating the
 						// intersection of two lines breaks because of the y = mx + b
-						// notation so instead let's calculate the y intercept of the line
+						// notation so instead let's calculate the y intercept of the line.
 						float bisecting_slope =
 								-point_xy[0] /
-								point_xy[1]; // rotated 90 because it's the bisecting line
+								point_xy[1]; // Rotated 90 because it's the bisecting line.
 						float bisecting_y =
-								point_xy[1] / 2; // y value when the bisecting line intersects
-								// the line to the point
+								point_xy[1] / 2; // Y value when the bisecting line intersects
+								// the line to the point.
 						next_power = pow(
 								bisecting_slope * -(point_xy[0] / 2) + bisecting_y,
-								2); // squared just because. we're not actually calculating dist
+								2); // Squared just because. we're not actually calculating dist.
 					} else if (point_xy[1] == 0) {
-						// point is on the x-axis which means the bisecting line would be
-						// vertical and also undefined we calculate
+						// Point is on the x-axis which means the bisecting line would be
+						// vertical and also undefined we calculate.
 						float bisecting_x = point_xy[0] / 2;
 						float slope = redirection_direction[1] /
 									  redirection_direction[0]; // rise over run
@@ -249,8 +245,8 @@ Node *LassoDB::calc_top_redirecting_power(Node *snapped_origin,
 						next_power = pow(intersect_x, 2) +
 									 pow(intersect_y, 2); // squared euclidian distance
 					} else {
-						// this is the most common case
-						// equation taken from the internet
+						// This is the most common case
+						// equation taken from the internet.
 						float a1 = -point_xy[0] / point_xy[1];
 						float c1 = (1 - a1) * point_xy[0] / 2;
 						float a2 = redirection_direction[1] / redirection_direction[0];
@@ -271,7 +267,3 @@ Node *LassoDB::calc_top_redirecting_power(Node *snapped_origin,
 	}
 	return output;
 }
-
-// float LassoDB::calc_single_redirect_power(){
-
-// }
