@@ -200,12 +200,8 @@ Node *LassoDB::calc_top_redirecting_power(Node *snapped_origin,
 		Basis local_basis =
 				Basis(x_vector, y_vector,
 						z_vector); // ITS FUCKING TRANSPOSED BY DEFAULT. WHY!?
-
-		Vector3 local_snapped_vector = local_basis.xform(snapped_vector);
-
 		Ref<LassoPoint> first;
 		float redirect_power = INFINITY; // The lower is better.
-		float biggest_diff = 0;
 		for (int i = 0; i < points.size(); i++) {
 			Ref<LassoPoint> next = points[i];
 			float next_power = 0;
