@@ -226,7 +226,7 @@ Node *LassoDB::calc_top_redirecting_power(Node *snapped_origin,
 								point_xy[1]; // Rotated 90 because it's the bisecting line.
 						float bisecting_y =
 								point_xy[1] / 2; // Y value when the bisecting line intersects
-								// the line to the point.
+						// the line to the point.
 						next_power = pow(
 								bisecting_slope * -(point_xy[0] / 2) + bisecting_y,
 								2); // Squared just because. we're not actually calculating dist.
