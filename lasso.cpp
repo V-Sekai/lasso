@@ -125,7 +125,7 @@ void LassoDB::add_point(Ref<LassoPoint> point) {
 void LassoDB::remove_point(Ref<LassoPoint> point) {
 	int index = points.find(point);
 	if (index >= 0) {
-		points.remove(index);
+		points.remove_at(index);
 	}
 }
 
