@@ -194,7 +194,7 @@ Node *LassoDB::calc_top_redirecting_power(Node *snapped_origin,
 				snapped_origin_Node3D->get_global_transform().origin;
 		Vector3 snapped_vector = viewpoint.origin - snapped_origin_position;
 		Vector3 z_vector = snapped_vector.normalized();
-		Vector3 up_vector = viewpoint.get_basis().get_axis(1).normalized();
+		Vector3 up_vector = viewpoint.get_basis().get_column(1).normalized();
 		Vector3 x_vector = z_vector.cross(up_vector).normalized();
 		Vector3 y_vector = x_vector.cross(z_vector).normalized();
 		Basis local_basis =
