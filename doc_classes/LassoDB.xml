@@ -28,31 +28,31 @@
 	<methods>
 		<method name="add_point">
 			<return type="void" />
-			<argument index="0" name="point" type="LassoPoint" />
+			<param index="0" name="point" type="LassoPoint" />
 			<description>
 			</description>
 		</method>
 		<method name="calc_top_redirecting_power">
 			<return type="Node" />
-			<argument index="0" name="snapped_point" type="Node" />
-			<argument index="1" name="viewpoint" type="Transform3D" />
-			<argument index="2" name="redirection_direction" type="Vector2" />
+			<param index="0" name="snapped_point" type="Node" />
+			<param index="1" name="viewpoint" type="Transform3D" />
+			<param index="2" name="redirection_direction" type="Vector2" />
 			<description>
 			</description>
 		</method>
 		<method name="calc_top_two_snapping_power">
 			<return type="Array" />
-			<argument index="0" name="source" type="Transform3D" />
-			<argument index="1" name="snap_max_power_increase" type="Node" />
-			<argument index="2" name="snap_increase_amount" type="float" />
-			<argument index="3" name="snap_lock" type="float" />
-			<argument index="4" name="arg4" type="bool" />
+			<param index="0" name="source" type="Transform3D" />
+			<param index="1" name="snap_max_power_increase" type="Node" />
+			<param index="2" name="snap_increase_amount" type="float" />
+			<param index="3" name="snap_lock" type="float" />
+			<param index="4" name="_unnamed_arg4" type="bool" />
 			<description>
 			</description>
 		</method>
 		<method name="remove_point">
 			<return type="void" />
-			<argument index="0" name="point" type="LassoPoint" />
+			<param index="0" name="point" type="LassoPoint" />
 			<description>
 			</description>
 		</method>

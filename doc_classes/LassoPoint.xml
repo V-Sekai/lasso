@@ -9,7 +9,7 @@
 	<methods>
 		<method name="enable_snapping">
 			<return type="void" />
-			<argument index="0" name="on" type="bool" />
+			<param index="0" name="on" type="bool" />
 			<description>
 			</description>
 		</method>
@@ -45,26 +45,26 @@
 		</method>
 		<method name="register_point">
 			<return type="void" />
-			<argument index="0" name="p_database" type="LassoDB" />
-			<argument index="1" name="p_origin" type="Node" />
+			<param index="0" name="p_database" type="LassoDB" />
+			<param index="1" name="p_origin" type="Node" />
 			<description>
 			</description>
 		</method>
 		<method name="set_size">
 			<return type="void" />
-			<argument index="0" name="p_size" type="float" />
+			<param index="0" name="p_size" type="float" />
 			<description>
 			</description>
 		</method>
 		<method name="set_snap_locked">
 			<return type="void" />
-			<argument index="0" name="p_enable" type="bool" />
+			<param index="0" name="p_enable" type="bool" />
 			<description>
 			</description>
 		</method>
 		<method name="set_snapping_power">
 			<return type="void" />
-			<argument index="0" name="p_snapping_power" type="float" />
+			<param index="0" name="p_snapping_power" type="float" />
 			<description>
 			</description>
 		</method>
