@@ -1,14 +1,18 @@
 #include "register_types.h"
 
-#include "core/class_db.h"
+#include "core/object/class_db.h"
 #include "lasso.h"
-// #include "lasso_point.h"
 
-void register_lasso_types() {
+void initialize_lasso_module(ModuleInitializationLevel p_level) {
+	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
+		return;
+	}
 	ClassDB::register_class<LassoDB>();
 	ClassDB::register_class<LassoPoint>();
 }
 
-void unregister_lasso_types() {
-	// Nothing to do here in this example.
+void uninitialize_lasso_module(ModuleInitializationLevel p_level) {
+	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
+		return;
+	}
 }

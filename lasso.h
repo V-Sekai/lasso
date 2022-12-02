@@ -2,21 +2,20 @@
 #define LASSODB_H
 #ifndef _3D_DISABLED
 
-#include <core/engine.h>
-#include <core/object.h>
-#include <core/variant.h>
-#include <scene/3d/spatial.h>
-#include <scene/main/node.h>
+#include "core/object/object.h"
+#include "core/object/ref_counted.h"
+#include "core/variant/variant.h"
+#include "scene/3d/node_3d.h"
+
 #include <memory>
 #include <vector>
-// #include "lasso_point.h"
 
 class LassoDB;
 
-class LassoPoint : public Reference {
-	GDCLASS(LassoPoint, Reference);
+class LassoPoint : public RefCounted {
+	GDCLASS(LassoPoint, RefCounted);
 
-	Spatial *origin = nullptr;
+	Node3D *origin = nullptr;
 	float last_snap_score = 0.0;
 	Ref<LassoDB> database;
 
@@ -27,7 +26,7 @@ public:
 	float size = 0.3;
 	LassoPoint();
 	~LassoPoint();
-	void register_point(Ref<LassoDB>p_database, Node *p_origin);
+	void register_point(Ref<LassoDB> p_database, Node *p_origin);
 	void unregister_point();
 	float get_snap_score();
 	void set_snap_score(float score);
@@ -46,8 +45,8 @@ public:
 	float get_snapping_power();
 };
 
-class LassoDB : public Reference {
-	GDCLASS(LassoDB, Reference);
+class LassoDB : public RefCounted {
+	GDCLASS(LassoDB, RefCounted);
 
 	Array points;
 
@@ -56,10 +55,8 @@ public:
 	~LassoDB();
 	void add_point(Ref<LassoPoint> point);
 	void remove_point(Ref<LassoPoint> point);
-	Array calc_top_two_snapping_power(Transform source, Node *current_snap, float snap_max_power_increase, float snap_increase_amount, bool snap_lock);
-	Node *calc_top_redirecting_power(Node *snapped_point, Transform viewpoint, Vector2 redirection_direction);
-	// Basis calc_single_redirect_basis(Transform viewpoint, Vector3 center);
-	// float calc_single_redirect_point(Basis inv_viewpoint_basis);
+	Array calc_top_two_snapping_power(Transform3D source, Node *current_snap, float snap_max_power_increase, float snap_increase_amount, bool snap_lock);
+	Node *calc_top_redirecting_power(Node *snapped_point, Transform3D viewpoint, Vector2 redirection_direction);
 	static void _bind_methods();
 };
 
