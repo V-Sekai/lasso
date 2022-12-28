@@ -108,6 +108,7 @@ void LassoDB::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("remove_point", "point"),
 			&LassoDB::remove_point);
 	ClassDB::bind_method(D_METHOD("calc_top_two_snapping_power", "source",
+								 "current_snap",
 								 "snap_max_power_increase",
 								 "snap_increase_amount", "snap_lock"),
 			&LassoDB::calc_top_two_snapping_power);
@@ -115,7 +116,6 @@ void LassoDB::_bind_methods() {
 								 "viewpoint", "redirection_direction"),
 			&LassoDB::calc_top_redirecting_power);
 }
-
 void LassoDB::add_point(Ref<LassoPoint> point) {
 	if (point.is_valid() && !points.has(point)) {
 		points.append(point);

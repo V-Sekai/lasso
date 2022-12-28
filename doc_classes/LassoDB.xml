@@ -30,6 +30,7 @@
 			<return type="void" />
 			<param index="0" name="point" type="LassoPoint" />
 			<description>
+				Lasso stores the score on each point, so you don't need to recalc for any point.
 			</description>
 		</method>
 		<method name="calc_top_redirecting_power">
@@ -38,6 +39,8 @@
 			<param index="1" name="viewpoint" type="Transform3D" />
 			<param index="2" name="redirection_direction" type="Vector2" />
 			<description>
+				You have something already selected and want to use a joystick to redirect the snapping to the next closest thing in a certain direction
+				like if you selected something, but you actually meant to click the thing to the right of it, you'd move your joystick to the right to redirect the snap to it.
 			</description>
 		</method>
 		<method name="calc_top_two_snapping_power">
