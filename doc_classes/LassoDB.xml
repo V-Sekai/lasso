@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="LassoDB" inherits="RefCounted" version="4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+<class name="LassoDB" inherits="RefCounted" version="4.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
 	<brief_description>
 		The lasso aims to reduce the difficulty of selecting objects in VR where they may be unevenly distributed in 3d space and the user may have bad aim or shaky hands. Traditional approaches to selecting objects in VR use lasers and raycasting, but this requires precision on the user's part especially for objects that are small, far away, or partially occluded by another object. There are two things the lasso does to fix the issue:
 		1. Use dynamic Voronoi hitboxes instead of raycasting to fixed 3d colliders.
